@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For Adya ❤️</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#ff4d6d">
+
+<style>
+  * { box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    min-height: 100svh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+    overflow: hidden;
+  }
+
+  .container {
+    background: rgba(0,0,0,0.25);
+    padding: 30px;
+    border-radius: 22px;
+    max-width: 90%;
+    animation: fadeIn 1s ease forwards;
+  }
+
+  h1 {
+    font-size: 26px;
+    margin-bottom: 18px;
+  }
+
+  button {
+    padding: 12px 32px;
+    margin: 10px;
+    border: none;
+    border-radius: 30px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  .yes { background: #ff4d6d; color: #fff; }
+  .no { background: #fff; color: #ff4d6d; }
+
+  #msg {
+    margin-top: 15px;
+    font-size: 18px;
+    display: none;
+  }
+
+  #celebrate { display: none; }
+
+  .photos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .photos img {
+    width: 100%;
+    border-radius: 16px;
+  }
+
+  .heart {
+    position: absolute;
+    font-size: 22px;
+    animation: floatUp 4s linear forwards;
+  }
+
+  @keyframes floatUp {
+    from { transform: translateY(0); opacity: 1; }
+    to { transform: translateY(-100vh); opacity: 0; }
+  }
+
+  .firework {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #fff;
+    border-radius: 50%;
+    animation: explode 1.2s ease-out forwards;
+  }
+
+  @keyframes explode {
+    from { transform: scale(1); opacity: 1; }
+    to { transform: scale(6); opacity: 0; }
+  }
+
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-6px); }
+    100% { transform: translateX(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- QUESTION -->
+<div class="container" id="question">
+  <h1 id="typeText"></h1>
+  <button class="yes" onclick="yesClicked()">Yes 💕</button>
+  <button class="no" onclick="noClicked()">No 😶</button>
+  <div id="msg"></div>
+</div>
+
+<!-- CELEBRATE -->
+<div class="container" id="celebrate">
+  <h1>I knew you’d say yes 💖</h1>
+  <h1 style="font-size:22px;">I’m really glad it’s you 💖</h1>
+
+  <div class="photos">
+    <img src="photos/photo1.jpg">
+    <img src="photos/photo2.jpg">
+    <img src="photos/photo3.jpg">
+    <img src="photos/photo4.jpg">
+  </div>
+</div>
+
+<!-- FAKE CONFIRM -->
+<div id="fakeConfirm" style="
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+">
+  <div id="confirmBox" style="
+    background:#fff;
+    color:#ff4d6d;
+    padding:25px;
+    border-radius:20px;
+    max-width:80%;
+    text-align:center;
+  ">
+    <p id="confirmText" style="font-size:18px;margin-bottom:20px;"></p>
+    <div id="confirmButtons" style="display:flex;gap:10px;justify-content:center;">
+      <button id="btnYes" onclick="fakeYes()">Yes</button>
+      <button id="btnCancel" onclick="fakeCancel()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<audio id="music" src="perfect.mp3" playsinline></audio>
+
+<script>
+  /* Typing */
+  const text = "Hi Adya 💖\nWill you be my Valentine?";
+  let i = 0;
+  const target = document.getElementById("typeText");
+  function typeWriter() {
+    if (i < text.length) {
+      target.innerHTML += text[i] === "\n" ? "<br>" : text[i];
+      i++;
+      setTimeout(typeWriter, 60);
+    }
+  }
+  typeWriter();
+
+  const dramaticTexts = [
+    "Are you sure? 😶",
+    "Think carefully… 🤔",
+    "This is your last chance 👀",
+    "This decision has consequences ⚠️",
+    "Okay now this is serious 😬",
+    "You’re testing fate 😏",
+    "No escape anymore 😈"
+  ];
+
+  const bgMessages = [
+    "Nice try 😏",
+    "Haha nope 😄",
+    "Still not happening 😌",
+    "I admire the persistence 😄",
+    "Wrong button again 😏",
+    "This is getting funny 😂",
+    "Okay… wow 😆"
+  ];
+
+  let noCount = 0;
+  let lastBg = -1;
+
+  function noClicked() {
+    const modal = document.getElementById("fakeConfirm");
+    const box = document.getElementById("confirmBox");
+    const textEl = document.getElementById("confirmText");
+    const buttons = document.getElementById("confirmButtons");
+
+    textEl.innerHTML = dramaticTexts[Math.min(noCount, dramaticTexts.length - 1)];
+    noCount++;
+
+    if (Math.random() > 0.5) {
+      buttons.insertBefore(btnCancel, btnYes);
+    } else {
+      buttons.insertBefore(btnYes, btnCancel);
+    }
+
+    box.style.animation = "none";
+    box.offsetHeight;
+    box.style.animation = "shake 0.4s";
+
+    modal.style.display = "flex";
+  }
+
+  function fakeYes() { closeConfirm(); }
+  function fakeCancel() { closeConfirm(); }
+
+  function closeConfirm() {
+    document.getElementById("fakeConfirm").style.display = "none";
+    const msg = document.getElementById("msg");
+    msg.style.display = "block";
+    msg.innerHTML = "<em>sigh… 😮‍💨</em>";
+
+    setTimeout(() => {
+      let idx;
+      do {
+        idx = Math.floor(Math.random() * bgMessages.length);
+      } while (idx === lastBg);
+      lastBg = idx;
+      msg.innerHTML = bgMessages[idx];
+    }, 700);
+  }
+
+  /* YES CLICK — MUSIC STARTS HERE (2:42 with fade-in) */
+  function yesClicked() {
+    const music = document.getElementById("music");
+
+    music.volume = 0;
+
+    music.addEventListener("loadedmetadata", () => {
+      music.currentTime = 162; // 2:42
+      music.play().catch(() => {});
+    }, { once: true });
+
+    let v = 0;
+    const fade = setInterval(() => {
+      v += 0.04;
+      music.volume = Math.min(v, 1);
+      if (v >= 1) clearInterval(fade);
+    }, 200);
+
+    document.getElementById("question").style.display = "none";
+    document.getElementById("celebrate").style.display = "block";
+
+    fireworks();
+    setInterval(hearts, 300);
+  }
+
+  function fireworks() {
+    for (let i = 0; i < 20; i++) {
+      const f = document.createElement("div");
+      f.className = "firework";
+      f.style.left = Math.random() * innerWidth + "px";
+      f.style.top = Math.random() * innerHeight + "px";
+      document.body.appendChild(f);
+      setTimeout(() => f.remove(), 1200);
+    }
+  }
+
+  function hearts() {
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.innerHTML = "❤️";
+    h.style.left = Math.random() * innerWidth + "px";
+    h.style.bottom = "0";
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 4000);
+  }
+
+  document.addEventListener("click", () => {
+    const el = document.documentElement;
+    if (el.requestFullscreen) el.requestFullscreen();
+  }, { once:true });
+</script>
+
+</body>
+</html>
